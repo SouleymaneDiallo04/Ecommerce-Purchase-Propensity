@@ -1,0 +1,10 @@
+{
+  "pr_auc_cv": 0.1027,
+  "params": {
+    "n_estimators": 400,
+    "learning_rate": 0.09468144390726754,
+    "num_leaves": 47,
+    "min_child_samples": 76,
+    "reg_lambda": 3.059576314822119
+  }
+}

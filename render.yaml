@@ -1,0 +1,8 @@
+# Blueprint Render pour l'API de scoring (deploiement en 1 clic depuis le repo GitHub).
+services:
+  - type: web
+    name: ga-journey-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
