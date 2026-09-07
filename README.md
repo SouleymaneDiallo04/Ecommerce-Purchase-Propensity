@@ -5,10 +5,13 @@
 > attribution des canaux sur des données Google Analytics, le tout livré comme un service de
 > production (CLI, API, dashboard, tests, CI).
 
+[![Demo](https://img.shields.io/badge/d%C3%A9mo-en%20ligne-brightgreen)](https://ecommerce-purchase-propensity-jch32sxxye7yp4wurctwwm.streamlit.app/)
 ![CI](https://github.com/SouleymaneDiallo04/Ecommerce-Purchase-Propensity/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Lint](https://img.shields.io/badge/lint-ruff-orange)
 ![Tests](https://img.shields.io/badge/tests-pytest-green)
+
+**Démo en ligne :** https://ecommerce-purchase-propensity-jch32sxxye7yp4wurctwwm.streamlit.app/
 
 ## Aperçu
 
