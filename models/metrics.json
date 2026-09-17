@@ -1,153 +1,157 @@
 {
   "insession": {
     "metrics": {
-      "pr_auc": 0.0939,
-      "roc_auc": 0.6185,
-      "brier": 0.06223,
-      "base_rate": 0.0672,
-      "top_decile_capture_%": 14.3,
-      "top30_capture_%": 48.5,
-      "n_iter": 1,
-      "n_train": 31111,
-      "n_test": 521
+      "pr_auc": 0.1794,
+      "roc_auc": 0.9433,
+      "brier": 0.01286,
+      "base_rate": 0.0146,
+      "top_decile_capture_%": 79.5,
+      "top30_capture_%": 98.9,
+      "n_iter": 202,
+      "n_train": 264620,
+      "n_test": 137946
     },
     "importance": {
-      "pre_hits": 234.2,
-      "pre_product": 179.6,
-      "pre_seconds": 71.1,
-      "visit_number": 49.1,
-      "channelGrouping": 30.9,
-      "pre_category": 27.6,
-      "is_mobile": 23.9,
-      "pre_unique_pages": 13.4,
-      "pre_home": 10.7,
-      "pre_search": 4.8,
-      "source": 0.0,
-      "medium": 0.0
+      "pre_hits": 91698.4,
+      "country": 37708.3,
+      "pre_seconds": 23116.6,
+      "visit_number": 16328.9,
+      "pre_browse": 15091.4,
+      "sub_continent": 14143.6,
+      "pre_unique_pages": 9699.2,
+      "pre_product": 9301.8,
+      "source": 7268.9,
+      "device_category": 6435.8,
+      "new_visit": 6086.6,
+      "os": 4454.7
     },
     "business": {
-      "threshold": 0.0463,
-      "expected_value": 1385.0,
-      "n_targeted": 343,
-      "share_targeted_%": 65.8,
-      "buyers_captured": 31,
-      "buyers_capture_%": 88.6,
+      "threshold": 0.0376,
+      "expected_value": 91755.0,
+      "n_targeted": 15049,
+      "share_targeted_%": 10.9,
+      "buyers_captured": 1670,
+      "buyers_capture_%": 82.7,
       "params": {
         "value_tp": 100.0,
         "cost_action": 5.0
       },
       "top30": {
         "top_fraction_%": 30.0,
-        "buyers_capture_%": 48.6,
-        "lift_vs_random": 1.62
+        "buyers_capture_%": 98.8,
+        "lift_vs_random": 3.29
       }
     },
     "cv": {
       "n_folds": 3,
-      "pr_auc_mean": 0.0635,
-      "pr_auc_std": 0.0162,
-      "roc_auc_mean": 0.5853,
-      "roc_auc_std": 0.0693
+      "pr_auc_mean": 0.1804,
+      "pr_auc_std": 0.0043,
+      "roc_auc_mean": 0.9434,
+      "roc_auc_std": 0.0043
     }
   },
   "customer": {
     "metrics": {
-      "pr_auc": 0.1215,
-      "roc_auc": 0.6731,
-      "brier": 0.06264,
-      "base_rate": 0.0672,
-      "top_decile_capture_%": 20.0,
-      "top30_capture_%": 54.3,
-      "n_iter": 49,
-      "n_train": 31111,
-      "n_test": 521
+      "pr_auc": 0.1191,
+      "roc_auc": 0.8916,
+      "brier": 0.01356,
+      "base_rate": 0.0146,
+      "top_decile_capture_%": 61.1,
+      "top30_capture_%": 91.2,
+      "n_iter": 266,
+      "n_train": 264620,
+      "n_test": 137946
     },
     "importance": {
-      "prior_pageviews_avg": 3591.8,
-      "hour": 1487.0,
-      "days_since_last": 1343.3,
-      "channelGrouping": 765.2,
-      "country": 761.6,
-      "device_category": 575.6,
-      "visit_number": 447.6,
-      "os": 355.1,
-      "source": 99.8,
-      "prior_purchases": 93.7,
-      "is_mobile": 93.5,
-      "sub_continent": 64.9
+      "country": 45551.3,
+      "prior_pageviews_avg": 35205.7,
+      "sub_continent": 32129.2,
+      "source": 10622.3,
+      "os": 10123.1,
+      "device_category": 7826.0,
+      "visit_number": 7614.6,
+      "channelGrouping": 6580.6,
+      "hour": 6336.2,
+      "days_since_last": 5391.1,
+      "prior_sessions": 4212.1,
+      "prior_purchases": 3424.5
     },
     "business": {
-      "threshold": 0.0487,
-      "expected_value": 1430.0,
-      "n_targeted": 214,
-      "share_targeted_%": 41.1,
-      "buyers_captured": 25,
-      "buyers_capture_%": 71.4,
+      "threshold": 0.0472,
+      "expected_value": 54570.0,
+      "n_targeted": 13766,
+      "share_targeted_%": 10.0,
+      "buyers_captured": 1234,
+      "buyers_capture_%": 61.1,
       "params": {
         "value_tp": 100.0,
         "cost_action": 5.0
       },
       "top30": {
         "top_fraction_%": 30.0,
-        "buyers_capture_%": 54.3,
-        "lift_vs_random": 1.81
+        "buyers_capture_%": 91.3,
+        "lift_vs_random": 3.04
       }
     },
     "cv": {
       "n_folds": 3,
-      "pr_auc_mean": 0.0863,
-      "pr_auc_std": 0.0228,
-      "roc_auc_mean": 0.6111,
-      "roc_auc_std": 0.0772
+      "pr_auc_mean": 0.1214,
+      "pr_auc_std": 0.0049,
+      "roc_auc_mean": 0.891,
+      "roc_auc_std": 0.0082
     }
   },
   "sequence": {
     "metrics": {
-      "pr_auc": 0.156,
-      "roc_auc": 0.7281,
-      "brier": 0.06194,
-      "base_rate": 0.0672,
-      "top_decile_capture_%": 31.399999618530273,
-      "top30_capture_%": 59.9,
-      "brier_raw": 0.19577,
-      "n_train": 31111,
-      "n_test": 521,
+      "pr_auc": 0.0642,
+      "roc_auc": 0.8029,
+      "brier": 0.01399,
+      "base_rate": 0.0146,
+      "top_decile_capture_%": 46.400001525878906,
+      "top30_capture_%": 79.1,
+      "brier_raw": 0.18237,
+      "n_train": 264620,
+      "n_test": 137946,
       "epochs": 8,
       "max_len": 20,
-      "vocab_size": 7
+      "vocab_size": 22
     }
   },
   "attribution": {
-    "base_conversion_prob": 0.0894,
-    "n_conversions": 1341,
+    "base_conversion_prob": 0.0157,
+    "n_conversions": 4958,
     "channels": {
+      "Referral": {
+        "removal_effect": 0.0071,
+        "attributed_conversions": 2099.5
+      },
       "Organic Search": {
-        "removal_effect": 0.0392,
-        "attributed_conversions": 418.3
+        "removal_effect": 0.0054,
+        "attributed_conversions": 1597.7
       },
       "Direct": {
-        "removal_effect": 0.0288,
-        "attributed_conversions": 307.4
-      },
-      "Referral": {
-        "removal_effect": 0.0182,
-        "attributed_conversions": 194.5
+        "removal_effect": 0.003,
+        "attributed_conversions": 879.3
       },
       "Paid Search": {
-        "removal_effect": 0.0146,
-        "attributed_conversions": 156.1
+        "removal_effect": 0.0008,
+        "attributed_conversions": 222.1
       },
       "Social": {
-        "removal_effect": 0.0125,
-        "attributed_conversions": 133.1
+        "removal_effect": 0.0002,
+        "attributed_conversions": 68.9
       },
       "Display": {
-        "removal_effect": 0.0074,
-        "attributed_conversions": 78.7
+        "removal_effect": 0.0002,
+        "attributed_conversions": 61.2
       },
       "Affiliates": {
-        "removal_effect": 0.005,
-        "attributed_conversions": 52.9
+        "removal_effect": 0.0001,
+        "attributed_conversions": 26.4
+      },
+      "(Other)": {
+        "removal_effect": 0.0,
+        "attributed_conversions": 2.8
       }
     }
   }

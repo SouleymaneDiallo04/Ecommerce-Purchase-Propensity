@@ -13,6 +13,8 @@
 
 **Démo en ligne :** https://ecommerce-purchase-propensity-jch32sxxye7yp4wurctwwm.streamlit.app/
 
+![Vue d'ensemble : tunnel de conversion, gains cumulés, calibration et attribution des canaux, sur données Google Analytics réelles](figures/overview.png)
+
 ## Aperçu
 
 Les équipes e-commerce veulent savoir, le plus tôt possible, si un visiteur va convertir, pour le
@@ -66,30 +68,41 @@ Le reste de la chaîne :
 * **Ingénierie de production** : API FastAPI, dashboard Streamlit, Docker et docker-compose, suite
   pytest, CI GitHub Actions, linting ruff.
 
-## Résultats (données GA réelles, fenêtre de 3 mois, taux de base 1,5 pour cent)
+## Résultats (données GA réelles)
 
-| Modèle | Signal utilisé | ROC-AUC | Acheteurs captés (1er décile) |
-|--------|----------------|:-------:|:-----------------------------:|
-| in-session | premiers hits de la visite | 0,94 \* | 79 pour cent |
-| **cross-session (production)** | **historique des visites** | **0,89** | **60 pour cent** |
-| séquence (GRU) | clickstream ordonné | 0,95 \* | 92 pour cent |
+Google Merchandise Store, fenêtre **février à juillet 2017** (402 566 sessions). Évaluation par
+**split temporel** : entraînement sur février-mai, test sur juin-juillet (137 946 sessions, taux de
+base **1,46 pour cent**). Reproductible en une commande (voir plus bas).
 
-\* Volontairement signalé : sur ce jeu de données, les scores très élevés sont en partie dus à
-l'engagement (un visiteur qui rebondit n'achète jamais), un signal quasi trivial. Le modèle que je
-déploierais réellement est **cross-session**, dont les facteurs (géographie, canal d'acquisition,
-historique) sont actionnables et connus avant la visite. Les métriques sont aussi validées par
-validation croisée temporelle (moyenne et écart-type sur des fenêtres glissantes), pas un seul split
-chanceux.
+| Modèle | Signal utilisé | ROC-AUC (test) | CV temporelle | Acheteurs captés (1er décile) |
+|--------|----------------|:--------------:|:-------------:|:-----------------------------:|
+| in-session | premiers hits de la visite | 0,943 \* | 0,943 ±0,004 | 79,5 pour cent |
+| **cross-session (production)** | **historique des visites** | **0,892** | **0,891 ±0,008** | **61,1 pour cent** |
+| séquence (GRU) | clickstream ordonné, tronqué avant l'intention | 0,803 | — | 46,4 pour cent |
+
+En ciblant les **30 pour cent** de visiteurs les mieux scorés, le modèle de production capte
+**91 pour cent** des acheteurs, soit un lift de **3 fois** l'aléatoire. Les probabilités sont
+calibrées (isotonic, voir la courbe de fiabilité ci-dessus) et le seuil de ciblage est fixé par une
+fonction coût/gain, pas par un F1. L'attribution Markov classe **Referral** et **Organic Search**
+comme les canaux à plus fort impact réel sur ces données.
+
+\* Le score in-session élevé vient en partie de l'engagement des premiers hits (un visiteur qui
+rebondit n'achète jamais), un signal peu actionnable. Le modèle que je déploierais réellement est
+**cross-session**, dont les facteurs (géographie, canal d'acquisition, historique) sont connus avant
+la visite. La CV temporelle (moyenne et écart-type sur fenêtres glissantes) confirme que ce ne sont
+pas des splits chanceux.
 
 ## Ce qui distingue ce projet
 
-Obtenir un modèle à 0,95 sur ces données est facile. **Savoir que 0,95 est un mensonge, c'est le
-métier.** Ce dépôt montre deux traques de fuite et leur correction :
+Obtenir un ROC-AUC de 0,95 sur ces données est facile en laissant fuiter des variables. **Savoir
+que ce 0,95 est un mensonge, c'est le métier.** Ce dépôt montre deux traques de fuite et leur
+correction :
 
-* les variables d'engagement (`pageviews`, `hits`, `time_on_site`) sont exclues, car gonflées par
-  l'achat lui-même ;
+* les variables d'engagement (`pageviews`, `hits`, `time_on_site`) sont exclues, car mécaniquement
+  gonflées par l'achat lui-même ;
 * le modèle de séquence tronque chaque parcours au premier signal d'intention (panier, checkout,
-  pages de compte ou de confirmation), pour qu'aucune page post-achat ne fuite dans l'entrée.
+  pages de compte ou de confirmation) : une fois la fuite retirée, son ROC-AUC retombe d'environ
+  0,95 à **0,80**, le vrai pouvoir prédictif du seul ordre des pages.
 
 Détecter puis supprimer la fuite, et livrer le modèle honnête et actionnable, est la compétence
 centrale que démontre ce projet.
@@ -111,7 +124,11 @@ Sur les vraies données Google Analytics (projet Google Cloud gratuit) :
 
 ```bash
 python -m src.pipeline train --source bigquery --project VOTRE_PROJET_GCP \
-       --date-min 20170401 --date-max 20170731
+       --date-min 20170201 --date-max 20170801 --split-date 20170601
+
+# figures du run reel (funnel, gains, calibration, attribution)
+python scripts/make_figures.py --project VOTRE_PROJET_GCP \
+       --date-min 20170201 --date-max 20170801 --split-date 20170601
 ```
 
 ## Structure du projet
@@ -121,6 +138,8 @@ src/        data, features, model, sequence_model (GRU), evaluate, attribution,
             validation (CV temporelle), business (cout/gain), tuning (Optuna), pipeline, api
 app/        dashboard.py (Streamlit)
 sql/        requetes BigQuery (sessions, clickstream ordonne)
+scripts/    make_figures.py (figures du run reel)
+figures/    figures generees (funnel, gains, calibration, attribution, overview)
 tests/      pytest (donnees, fuite, API, rigueur)
 models/     artefacts entraines et metrics.json
 racine      Dockerfile, Dockerfile.dashboard, docker-compose.yml, render.yaml,
