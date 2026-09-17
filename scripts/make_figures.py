@@ -26,6 +26,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from src import data as D
 from src import features as F
@@ -170,6 +171,9 @@ def main():
     print('predictions test...')
     y, p = _test_predictions(sessions, args.split_date)
     print(f'  n_test={len(y)} base={y.mean():.4f}')
+    # scores du modele de production, servant au simulateur de profit du dashboard
+    pd.DataFrame({'y_true': y.astype(int), 'proba': np.round(p, 5)}).to_csv(
+        ROOT / 'models' / 'scores_customer_test.csv', index=False)
     print('funnel BigQuery...')
     fn = _funnel_from_bq(args.project, args.date_min, args.date_max)
 

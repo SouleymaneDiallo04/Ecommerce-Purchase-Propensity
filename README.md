@@ -64,9 +64,9 @@ Le reste de la chaîne :
 
 * **Attribution Markov** (removal effect) pour classer les canaux par impact réel ;
 * **Rigueur data science** : validation croisée temporelle, calibration des probabilités (isotonic),
-  seuil de décision coût/gain, tuning Optuna, suivi MLflow ;
-* **Ingénierie de production** : API FastAPI, dashboard Streamlit, Docker et docker-compose, suite
-  pytest, CI GitHub Actions, linting ruff.
+  seuil de décision coût/gain, test anti-fuite automatisé, tuning Optuna, suivi MLflow ;
+* **Ingénierie de production** : API FastAPI, dashboard Streamlit (avec simulateur de profit
+  interactif), Docker et docker-compose, suite pytest, CI GitHub Actions, linting ruff.
 
 ## Résultats (données GA réelles)
 
@@ -105,7 +105,14 @@ correction :
   0,95 à **0,80**, le vrai pouvoir prédictif du seul ordre des pages.
 
 Détecter puis supprimer la fuite, et livrer le modèle honnête et actionnable, est la compétence
-centrale que démontre ce projet.
+centrale que démontre ce projet. Un test automatisé (`tests/test_rigor.py`) verrouille cette
+garantie : il échoue si une variable d'engagement ou une page post-intention réapparaît dans les
+features.
+
+Côté métier, le dashboard intègre un **simulateur de profit** : on règle la valeur d'un acheteur et
+le coût d'une action, et il calcule combien de trafic cibler pour maximiser le gain net (par exemple,
+cibler 10 pour cent du trafic capte 61 pour cent des acheteurs). Le score devient une décision, pas
+une métrique abstraite.
 
 ## Démarrage rapide
 

@@ -7,6 +7,7 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -22,7 +23,8 @@ st.caption('Parcours clients, propension d\'achat et attribution sur donnees Goo
 METRICS = ROOT / 'models' / 'metrics.json'
 report = json.loads(METRICS.read_text(encoding='utf-8')) if METRICS.exists() else None
 
-tab1, tab2, tab3, tab4 = st.tabs(['Funnel', 'Modeles', 'Attribution', 'Scoring en direct'])
+tab1, tab2, tab5, tab3, tab4 = st.tabs(
+    ['Funnel', 'Modeles', 'Ciblage & profit', 'Attribution', 'Scoring en direct'])
 
 with tab1:
     st.subheader('Tunnel de conversion (echantillon synthetique)')
@@ -59,6 +61,45 @@ with tab3:
         st.bar_chart(dfa.set_index('canal')['conversions_attribuees'])
     else:
         st.info('Attribution absente : lance l\'entrainement.')
+
+with tab5:
+    st.subheader('Ciblage et profit : combien contacter pour maximiser le gain net')
+    scores_path = ROOT / 'models' / 'scores_customer_test.csv'
+    if not scores_path.exists():
+        st.info('Scores absents : lance `python scripts/make_figures.py` pour les generer.')
+    else:
+        sc = pd.read_csv(scores_path)
+        y = sc['y_true'].to_numpy()
+        p = sc['proba'].to_numpy()
+        st.caption('Modele de production (cross-session), sur le jeu de test reel. '
+                   'Regle la valeur d\'un acheteur et le cout d\'une action : le simulateur '
+                   'trouve combien de trafic cibler pour maximiser le profit net.')
+        cc = st.columns(2)
+        value_tp = cc[0].slider('Gain par acheteur capte (EUR)', 10, 500, 100, 10)
+        cost_action = cc[1].slider('Cout d\'une action marketing par session ciblee (EUR)', 1, 50, 5, 1)
+
+        order = np.argsort(-p)
+        ys = y[order]
+        tp = np.cumsum(ys)
+        n = np.arange(1, len(ys) + 1)
+        profit = value_tp * tp - cost_action * n
+        frac = 100.0 * n / len(ys)
+        k = int(np.argmax(profit))
+
+        m = st.columns(4)
+        m[0].metric('Trafic a cibler', f'{100*(k+1)/len(ys):.0f}%')
+        m[1].metric('Acheteurs captes', f'{100*tp[k]/max(y.sum(),1):.0f}%')
+        m[2].metric('Profit net maximal', f'{profit[k]:,.0f} EUR'.replace(',', ' '))
+        m[3].metric('Lift vs aleatoire', f'{(tp[k]/(k+1))/max(y.mean(),1e-9):.1f}x')
+
+        idx = np.linspace(0, len(ys) - 1, min(len(ys), 400)).astype(int)
+        curve = pd.DataFrame({'profit_net_EUR': profit[idx]},
+                             index=np.round(frac[idx], 2))
+        curve.index.name = '% du trafic cible (mieux scores en premier)'
+        st.line_chart(curve)
+        st.caption(f'Optimum : cibler les {100*(k+1)/len(ys):.0f}% mieux scores capte '
+                   f'{100*tp[k]/max(y.sum(),1):.0f}% des acheteurs, pour un profit net de '
+                   f'{profit[k]:,.0f} EUR sur le jeu de test.'.replace(',', ' '))
 
 with tab4:
     st.subheader('Scorer une session')
